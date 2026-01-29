@@ -9,3 +9,4 @@ def main_menu():
     print("4. View Reports")
     print("5. Exit")
     print("="*50)
+
