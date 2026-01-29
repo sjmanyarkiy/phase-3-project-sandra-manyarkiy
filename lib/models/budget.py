@@ -51,7 +51,7 @@ class Budget:
         
     @classmethod
     def create_table(cls):
-        sql = """CREATE IF NOT EXISTS budgets (
+        sql = """CREATE TABLE IF NOT EXISTS budgets (
             id INTEGER PRIMARY KEY,
             monthly_limit INTEGER, 
             month TEXT, 
@@ -70,3 +70,20 @@ class Budget:
 
         CURSOR.execute(sql)
         CONN.commit()
+
+    def save(self):
+        sql = """INSERT INTO budgets (monthly_limit, month, category_id, user_id) VALUES 
+        (?, ?, ?, ?)"""
+
+        CURSOR.execute(sql, (self.monthly_limit, self.month, self.category_id, self.user_id))
+        CONN.commit()
+        self.id = self
+        type(self).all[self.id] = self
+
+    def update(self, monthly_limit):
+        sql = """UPDATE budgets SET monthly_limit = ? WHERE id = ?"""
+
+        CURSOR.execute(sql, (monthly_limit, self.id))
+        CONN.commit()
+
+        self.monthly_limit = monthly_limit
