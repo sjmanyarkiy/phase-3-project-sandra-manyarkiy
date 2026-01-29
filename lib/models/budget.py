@@ -77,7 +77,7 @@ class Budget:
 
         CURSOR.execute(sql, (self.monthly_limit, self.month, self.category_id, self.user_id))
         CONN.commit()
-        self.id = self
+        self.id = CURSOR.lastrowid
         type(self).all[self.id] = self
 
     def update(self, monthly_limit):
@@ -89,9 +89,9 @@ class Budget:
         self.monthly_limit = monthly_limit
 
     def delete(self):
-        sql = """DELETE * FROM budgets WHERE id = ?"""
+        sql = """DELETE FROM budgets WHERE id = ?"""
 
-        CURSOR.execute(sql, (self.id))
+        CURSOR.execute(sql, (self.id,))
         CONN.commit()
 
         del type(self).all[self.id]
@@ -111,8 +111,8 @@ class Budget:
         if budget:
             budget.monthly_limit = row[1]
             budget.month = row[2]
-            budget.category_id = row[3]
-            budget.user_id = row[4]
+            budget._category_id = row[3]
+            budget._user_id = row[4]
         else:
             budget = cls(row[1], row[2], row[3], row[4])
             budget.id = row[0]
@@ -123,18 +123,18 @@ class Budget:
     def get_all(cls, user_id):
         sql = """SELECT * FROM budgets WHERE user_id = ?"""
 
-        rows = CURSOR.execute(sql, (user_id)).fetchall()
+        rows = CURSOR.execute(sql, (user_id,)).fetchall()
         return [cls.instance_from_db(row) for row in rows]
     
     @classmethod
     def find_by_id(cls, budget_id):
         sql = """SELECT * FROM budgets WHERE id = ?"""
 
-        row = CURSOR.execute(sql, (budget_id)).fetchone()
+        row = CURSOR.execute(sql, (budget_id,)).fetchone()
         return cls.instance_from_db(row) if row else None
     
     @classmethod
-    def find_by_category_and_name(cls, category_id, month, user_id):
+    def find_by_category_and_month(cls, category_id, month, user_id):
         sql = """SELECT * FROM budgets WHERE category_id = ? AND month = ? AND user_id = ?"""
 
         row = CURSOR.execute(sql, (category_id, month, user_id)).fetchone()
