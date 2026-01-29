@@ -21,7 +21,7 @@ class User:
         if isinstance(name, str) and len(name):
             self._name = name
         else:
-            raise ValueError("Name must be a string")
+            raise ValueError("name must be a non-empty string")
 
     @classmethod   
     def create_table(self):
@@ -59,9 +59,9 @@ class User:
         self.name = name
 
     def delete(self):
-        sql = """DELETE * FROM users WHERE ID = ?"""
+        sql = """DELETE FROM users WHERE id = ?"""
 
-        CURSOR.execute(sql, (self.id))
+        CURSOR.execute(sql, (self.id,))
         CONN.commit()
 
         del type(self).all[self.id]
