@@ -35,4 +35,31 @@ class Category:
         else:
             raise ValueError("user_id must reference a user in the database")
         
+    @classmethod
+    def create_table(cls):
+        sql = """CREATE TABLE IF NOT EXISTS categories (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            user_id INTEGERR,
+            FOREIGN KEY (user_id) references users(id)
+        
+        )"""
+
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def delete_table(cls):
+        sql = """DELETE TABLE IF EXISTS users"""
+
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    def save(self):
+        sql = """"""
+
+
+
+    
+        
     
