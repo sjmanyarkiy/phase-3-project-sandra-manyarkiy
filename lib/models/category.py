@@ -22,11 +22,11 @@ class Category:
         if isinstance(name, str) and len(name):
             self._name = name
         else:
-            raise ValueError("Name must be a string")
+            raise ValueError("name must be a non-empty string")
         
     @property
     def user_id(self):
-        self._user_id
+        return self._user_id
 
     @user_id.setter
     def user_id(self, user_id):
@@ -65,20 +65,21 @@ class Category:
         self.id = CURSOR.lastrowid
         type(self).all[self.id] = self
 
-    def update(self):
-        sql = """UPDATE categories SET name = ?, user_id = ? WHERE id = ?"""
+    def update(self, name):
+        sql = """UPDATE categories SET name = ? WHERE id = ?"""
 
-        CURSOR.execute(sql, (self.name, self.user_id, self.id))
+        CURSOR.execute(sql, (name, self.id))
         CONN.commit()
+        self.name = name
 
     def delete(self):
-        sql = """DELETE * FROM categories WHERE id = ?"""
+        sql = """DELETE FROM categories WHERE id = ?"""
 
-        CURSOR.execute(sql, (self.id))
+        CURSOR.execute(sql, (self.id,))
         CONN.commit()
 
     @classmethod
-    def create_category(cls, name, user_id):
+    def create(cls, name, user_id):
         category = cls(name, user_id)
         category.save()
         return category
@@ -113,8 +114,8 @@ class Category:
         return cls.instance_from_db(row) if row else None
     
     @classmethod
-    def find_by_name(cls, name):
-        sql = """SELECT * FROM categories WHERE name = ?"""
+    def find_by_name(cls, name, user_id):
+        sql = """SELECT * FROM categories WHERE name = ? AND user_id = ?"""
 
-        row = CURSOR.execute(sql, (name,)).fetchone()
+        row = CURSOR.execute(sql, (name, user_id)).fetchone()
         return cls.instance_from_db(row) if row else None
