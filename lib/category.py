@@ -77,6 +77,32 @@ class Category:
         CURSOR.execute(sql, (self.id))
         CONN.commit()
 
+    @classmethod
+    def create_category(cls, name, user_id):
+        category = cls(name, user_id)
+        category.save()
+        return category
+    
+    @classmethod
+    def instance_from_db(cls, row):
+
+        category = cls.all.get(row[0])
+
+        if category:
+            category.name = row[1]
+            category.user_id = row[2]
+        else:
+            category = cls(row[1], row[2])
+            category.id = row[0]
+            category.all[category.id] = category
+
+        return category
+    
+    @classmethod
+    def find_by_id(cls):
+
+
+
 
 
     
