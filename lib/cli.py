@@ -33,3 +33,15 @@ def expense_menu():
     print("4. Delete an expense")
     print("5. Back to main menu")
     print("="*50)
+
+def budget_menu():
+    """Display the budget management menu"""
+    print("\n" + "="*50)
+    print("     BUDGET MANAGEMENT")
+    print("="*50)
+    print("1. Set a budget")
+    print("2. View all budgets")
+    print("3. View budget vs spending")
+    print("4. Delete a budget")
+    print("5. Back to main menu")
+    print("="*50)
