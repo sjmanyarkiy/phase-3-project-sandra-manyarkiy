@@ -49,7 +49,7 @@ class Category:
         CONN.commit()
 
     @classmethod
-    def delete_table(cls):
+    def drop_table(cls):
         sql = """DROP TABLE IF EXISTS categories"""
 
         CURSOR.execute(sql)

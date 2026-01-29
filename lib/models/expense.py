@@ -85,7 +85,7 @@ class Expense:
 
     @classmethod
     def drop_table(cls):
-        sql = """DROP IF EXISTS expenses"""
+        sql = """DROP TABLE IF EXISTS expenses"""
 
         CURSOR.execute(sql)
         CONN.commit()

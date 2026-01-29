@@ -51,11 +51,12 @@ class User:
         self.id = CURSOR.lastrowid
         type(self).all[self.id] = self
 
-    def update(self):
+    def update(self, name):
         sql = """UPDATE users SET name = ? WHERE id = ?"""
 
-        CURSOR.execute(sql, (self.name, self.id))
+        CURSOR.execute(sql, (name, self.id))
         CONN.commit()
+        self.name = name
 
     def delete(self):
         sql = """DELETE * FROM users WHERE ID = ?"""
@@ -67,7 +68,7 @@ class User:
         self.id = None
 
     @classmethod
-    def create_user(cls, name):
+    def create(cls, name):
         user = cls(name)
         user.save()
         return user
