@@ -87,3 +87,12 @@ class Budget:
         CONN.commit()
 
         self.monthly_limit = monthly_limit
+
+    def delete(self):
+        sql = """DELETE * FROM budgets WHERE id = ?"""
+
+        CURSOR.execute(sql, (self.id))
+        CONN.commit()
+
+        del type(self).all[self.id]
+        self.id = None
