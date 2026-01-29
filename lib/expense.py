@@ -88,6 +88,26 @@ class Expense:
             expense = cls(row[1], row[2], row[4], row[5], row[0], row[3])
             cls.all[expense.id] = expense
         return expense
+    
+    @classmethod
+    def get_all(cls, user_id):
+        sql = """SELECT * FROM expenses WHERE user_id = ?"""
+
+        rows = CURSOR.execute(sql, (user_id,)).fetchall()
+        return [cls.instance_from_db(row) for row in rows]
+    
+    @classmethod
+    def find_by_id(cls, expense_id):
+        sql = "SELECT * FROM expenses WHERE id = ?"
+        row = CURSOR.execute(sql, (expense_id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+    
+    @classmethod
+    def get_by_category(cls, category_id, user_id):
+        sql = "SELECT * FROM expenses WHERE category_id = ? AND user_id = ?"
+        rows = CURSOR.execute(sql, (category_id, user_id)).fetchall()
+        return [cls.instance_from_db(row) for row in rows]
+
         
 
     
