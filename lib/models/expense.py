@@ -1,5 +1,7 @@
 from __init__ import CURSOR, CONN
 from datetime import datetime
+from category import Category
+from user import User
 
 
 class Expense:
@@ -16,6 +18,52 @@ class Expense:
 
     def __repr__(self):
         return f"<Expense {self.id}: {self.description} - ${self.amount}>"
+    
+    
+    @property
+    def description(self):
+        return self._description
+    
+    @description.setter
+    def description(self, description):
+        if isinstance(description, str) and len(description):
+            self._description = description
+        else:
+            raise ValueError("description must be a non-empty string")
+        
+    @property
+    def amount(self):
+        return self._amount
+    
+    @amount.setter
+    def amount(self, amount):
+        if isinstance(amount, int) and amount >= 0:
+            self._amount = amount
+        else:
+            raise ValueError("amount must be a positive integer")
+
+    @property
+    def category_id(self):
+        return self._category_id
+    
+    @category_id.setter
+    def category_id(self, category_id):
+        if type(category_id) is int and Category.find_by_id(category_id):
+            self._category_id = category_id
+        else:
+            raise ValueError("category id must exist in the category table")
+
+    @property
+    def user_id(self):
+        return self._user_id
+    
+    @user_id.setter
+    def user_id(self, user_id):
+        if type(user_id) is int and User.find_by_id(user_id):
+            self._user_id = user_id
+        else:
+            raise ValueError("user id must exist in the user table")
+
     
     @classmethod
     def create_table(cls):

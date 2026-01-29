@@ -11,10 +11,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'db'))
 # from db.models import User, Category, Expense, Budget
 
 from __init__ import CURSOR, CONN
-from user import User
-from category import Category
-from expense import Expense
-from budget import Budget
+from lib.models.user import User
+from lib.models.category import Category
+from lib.models.expense import Expense
+from lib.models.budget import Budget
 
 # ==================== SETUP & TEARDOWN ====================
 

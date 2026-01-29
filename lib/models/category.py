@@ -1,5 +1,5 @@
 from __init__ import CURSOR, CONN
-from user import User
+from lib.models.user import User
 
 class Category:
 
