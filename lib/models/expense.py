@@ -37,10 +37,10 @@ class Expense:
     
     @amount.setter
     def amount(self, amount):
-        if isinstance(amount, int) and amount >= 0:
+        if isinstance(amount, (int, float)) and amount > 0:
             self._amount = amount
         else:
-            raise ValueError("amount must be a positive integer")
+            raise ValueError("amount must be a positive number")
 
     @property
     def category_id(self):
@@ -62,7 +62,7 @@ class Expense:
         if type(user_id) is int and User.find_by_id(user_id):
             self._user_id = user_id
         else:
-            raise ValueError("user id must exist in the user table")
+            raise ValueError("user_id must exist in the user table")
 
     
     @classmethod
@@ -100,7 +100,7 @@ class Expense:
         type(self).all[self.id] = self
 
     def update(self, description, amount):
-        sql = """UPDATE categories SET description = ?, amount = ? WHERE id = ?"""
+        sql = """UPDATE expenses SET description = ?, amount = ? WHERE id = ?"""
 
         CURSOR.execute(sql, (description, amount, self.id))
         CONN.commit()
@@ -108,7 +108,7 @@ class Expense:
         self.amount = amount
 
     def delete(self):
-        sql = """DELETE * FROM expenses WHERE id = ?"""
+        sql = """DELETE FROM expenses WHERE id = ?"""
 
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
@@ -131,7 +131,7 @@ class Expense:
             expense.amount = row[2]
             expense.date = row[3]
             expense.category_id = row[4]
-            expense.user_id = row[5]
+            expense._user_id = row[5]
         else:
             expense = cls(row[1], row[2], row[4], row[5], row[0], row[3])
             cls.all[expense.id] = expense

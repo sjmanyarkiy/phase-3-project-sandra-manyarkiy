@@ -87,21 +87,18 @@ class User:
     
     @classmethod
     def get_all(cls):
-        """Get all users"""
         sql = "SELECT * FROM users"
         rows = CURSOR.execute(sql).fetchall()
         return [cls.instance_from_db(row) for row in rows]
     
     @classmethod
     def find_by_id(cls, user_id):
-        """Find user by ID"""
         sql = "SELECT * FROM users WHERE id = ?"
         row = CURSOR.execute(sql, (user_id,)).fetchone()
         return cls.instance_from_db(row) if row else None
     
     @classmethod
     def find_by_name(cls, name):
-        """Find user by name"""
         sql = "SELECT * FROM users WHERE name = ?"
         row = CURSOR.execute(sql, (name,)).fetchone()
         return cls.instance_from_db(row) if row else None
