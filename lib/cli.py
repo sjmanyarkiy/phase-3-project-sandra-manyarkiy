@@ -10,3 +10,14 @@ def main_menu():
     print("5. Exit")
     print("="*50)
 
+def user_menu():
+    """Display the user management menu"""
+    print("\n" + "="*50)
+    print("     USER MANAGEMENT")
+    print("="*50)
+    print("1. Create a new user")
+    print("2. View all users")
+    print("3. Find user by ID")
+    print("4. Delete a user")
+    print("5. Back to main menu")
+    print("="*50)
