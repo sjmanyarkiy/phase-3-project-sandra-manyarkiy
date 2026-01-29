@@ -51,8 +51,13 @@ class Expense:
         self.id = CURSOR.lastrowid
         type(self).all[self.id] = self
 
-    def update(self):
+    def update(self, description, amount):
         sql = """UPDATE categories SET description = ?, amount = ? WHERE id = ?"""
+
+        CURSOR.execute(sql, (description, amount, self.id))
+        CONN.commit()
+        self.description = description
+        self.amount = amount
 
     def delete(self):
         sql = """DELETE * FROM expenses WHERE id = ?"""
@@ -62,6 +67,27 @@ class Expense:
 
         del type(self).all[self.id]
         self.id = None
+
+    @classmethod
+    def create(cls, description, amount, category_id, user_id):
+        expense = cls(description, amount, category_id, user_id)
+        expense.save()
+        return expense
+    
+    @classmethod
+    def instance_from_db(cls, row):
+        expense = cls.all.get(row[0])
+
+        if expense:
+            expense.description = row[1]
+            expense.amount = row[2]
+            expense.date = row[3]
+            expense.category_id = row[4]
+            expense.user_id = row[5]
+        else:
+            expense = cls(row[1], row[2], row[4], row[5], row[0], row[3])
+            cls.all[expense.id] = expense
+        return expense
         
 
     
