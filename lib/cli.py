@@ -21,3 +21,15 @@ def user_menu():
     print("4. Delete a user")
     print("5. Back to main menu")
     print("="*50)
+
+def expense_menu():
+    """Display the expense management menu"""
+    print("\n" + "="*50)
+    print("     EXPENSE MANAGEMENT")
+    print("="*50)
+    print("1. Add an expense")
+    print("2. View all expenses")
+    print("3. View expenses by category")
+    print("4. Delete an expense")
+    print("5. Back to main menu")
+    print("="*50)
