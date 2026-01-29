@@ -96,3 +96,25 @@ class Budget:
 
         del type(self).all[self.id]
         self.id = None
+
+    @classmethod
+    def create(cls, monthly_limit, month, category_id, user_id):
+        budget = cls(monthly_limit, month, category_id, user_id)
+        budget.save()
+        return budget
+    
+
+    @classmethod
+    def instance_from_db(cls, row):
+
+        budget = cls.all.get(row[0])
+        if budget:
+            budget.monthly_limit = row[1]
+            budget.month = row[2]
+            budget.category_id = row[3]
+            budget.user_id = row[4]
+        else:
+            budget = cls(row[1], row[2], row[3], row[4])
+            budget.id = row[0]
+            cls.all[budget.id] = budget
+        return budget
