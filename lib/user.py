@@ -2,6 +2,8 @@ from __init__ import CURSOR, CONN
 
 class User:
 
+    all = {}
+
     def __init__(self, name, id = None):
         self.id = id
         self.name = name
@@ -40,12 +42,26 @@ class User:
         CURSOR.execute(sql)
         CONN.commit()
 
-    def save(self, name):
+    def save(self):
         sql = """INSERT INTO users (name) VALUES (?)"""
 
-        CURSOR.execute(sql, (name,))
+        CURSOR.execute(sql, (self.name,))
         CONN.commit()
 
         self.id = CURSOR.lastrowid
         type(self).all[self.id] = self
+
+    def update(self):
+        sql = """UPDATE users SET name = ? WHERE id = ?"""
+
+        CURSOR.execute(sql, (self.name, self.id))
+        CONN.commit()
+
+    def delete(self):
+        sql = """DELETE * FROM users WHERE ID = ?"""
+
+        CURSOR.execute(sql, (self.id))
+        CONN.commit()
+
+        del type(self).all[self.id]
  
