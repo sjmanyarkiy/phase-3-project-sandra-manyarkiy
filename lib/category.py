@@ -99,12 +99,15 @@ class Category:
         return category
     
     @classmethod
-    def find_by_id(cls):
-
-
-
-
-
+    def get_all(cls, user_id):
+        """Get all categories for a user"""
+        sql = "SELECT * FROM categories WHERE user_id = ?"
+        rows = CURSOR.execute(sql, (user_id,)).fetchall()
+        return [cls.instance_from_db(row) for row in rows]
     
-        
-    
+    @classmethod
+    def find_by_id(cls, category_id):
+        sql = """SELECT * FROM categories WHERE id = ?"""
+
+        row = CURSOR.execute(sql, (category_id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
