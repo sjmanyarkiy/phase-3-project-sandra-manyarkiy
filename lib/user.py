@@ -64,4 +64,24 @@ class User:
         CONN.commit()
 
         del type(self).all[self.id]
+        self.id = None
+
+    @classmethod
+    def create_user(cls, name):
+        user = cls(name)
+        user.save()
+        return user
+    
+    @classmethod
+    def instance_from_db(cls, row):
+        user = cls.all.get(row[0])
+
+        if user:
+            user.name = row[1]
+        else:
+            user = cls(row[1])
+            user.id = row[0]
+            cls.all[user.id] = user
+        return user
+        
  
