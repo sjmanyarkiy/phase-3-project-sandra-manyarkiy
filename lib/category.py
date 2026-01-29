@@ -41,7 +41,7 @@ class Category:
             id INTEGER PRIMARY KEY,
             name TEXT,
             user_id INTEGERR,
-            FOREIGN KEY (user_id) references users(id)
+            FOREIGN KEY (user_id) REFERENCES users(id)
         
         )"""
 
@@ -50,7 +50,7 @@ class Category:
 
     @classmethod
     def delete_table(cls):
-        sql = """DELETE TABLE IF EXISTS categories"""
+        sql = """DROP TABLE IF EXISTS categories"""
 
         CURSOR.execute(sql)
         CONN.commit()

@@ -24,7 +24,7 @@ class User:
             raise ValueError("Name must be a string")
 
     @classmethod   
-    def create(self):
+    def create_table(self):
         sql = """CREATE TABLE IF NOT EXISTS users (
 
             id INTEGER PRIMARY KEY,
@@ -36,7 +36,7 @@ class User:
         CONN.commit()
 
     @classmethod
-    def drop(self):
+    def drop_table(self):
         sql = """DROP TABLE IF EXISTS users"""
 
         CURSOR.execute(sql)
