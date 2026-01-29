@@ -1,3 +1,7 @@
+from config import CURSOR, CONN
+from .category import Category
+from .user import User
+
 class Budget:
     
     all = {}
@@ -8,3 +12,61 @@ class Budget:
         self.month = month
         self.category_id = category_id
         self.user_id = user_id
+
+    def __repr__(self):
+        return f"<Budget {self.id}: {self.month} - ${self.monthly_limit}>"
+    
+    @property
+    def monthly_limit(self):
+        return self._monthly_limit
+
+    @monthly_limit.setter
+    def monthly_limit(self, monthly_limit):
+        if isinstance(monthly_limit, (int, float)) and monthly_limit > 0:
+            self._monthly_limit = monthly_limit
+        else:
+            raise ValueError("monthly_limit must be a positive number")
+        
+    @property
+    def category_id(self):
+        return self._category_id
+    
+    @category_id.setter
+    def category_id(self, category_id):
+        if type(category_id) is int and Category.find_by_id(category_id):
+            self._category_id = category_id
+        else:
+            raise ValueError("category_id must reference a category in the database")
+        
+    @property
+    def user_id(self):
+        return self._user_id
+    
+    @user_id.setter
+    def user_id(self, user_id):
+        if type(user_id) is int and User.find_by_id(user_id):
+            self._user_id = user_id
+        else:
+            raise ValueError("user_id must reference a user in the database")
+        
+    @classmethod
+    def create_table(cls):
+        sql = """CREATE IF NOT EXISTS budgets (
+            id INTEGER PRIMARY KEY,
+            monthly_limit INTEGER, 
+            month TEXT, 
+            category_id INTEGER, 
+            user_id INTEGER,
+            FOREIGN KEY (category_id) REFERENCES categories(id),
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )"""
+
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def drop_table(cls):
+        sql = """DROP TABLE IF EXISTS budgets"""
+
+        CURSOR.execute(sql)
+        CONN.commit()
