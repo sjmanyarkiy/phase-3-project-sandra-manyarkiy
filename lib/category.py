@@ -50,13 +50,32 @@ class Category:
 
     @classmethod
     def delete_table(cls):
-        sql = """DELETE TABLE IF EXISTS users"""
+        sql = """DELETE TABLE IF EXISTS categories"""
 
         CURSOR.execute(sql)
         CONN.commit()
 
     def save(self):
-        sql = """"""
+        sql = """INSERT INTO categories (name, user_id) VALUES (?, ?)"""
+
+
+        CURSOR.execute(sql, (self.name, self.user_id))
+        CONN.commit()
+
+        self.id = CURSOR.lastrowid
+        type(self).all[self.id] = self
+
+    def update(self):
+        sql = """UPDATE categories SET name = ?, user_id = ? WHERE id = ?"""
+
+        CURSOR.execute(sql, (self.name, self.user_id, self.id))
+        CONN.commit()
+
+    def delete(self):
+        sql = """DELETE * FROM categories WHERE id = ?"""
+
+        CURSOR.execute(sql, (self.id))
+        CONN.commit()
 
 
 
