@@ -38,4 +38,28 @@ class Expense:
     @classmethod
     def drop_table(cls):
         sql = """DROP IF EXISTS expenses"""
+
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    def save(self):
+        sql = """INSERT INTO expenses (description, amount, date, category_id, user_id) VALUES (?, ?, ?, ?, ?)"""
+
+        CURSOR.execute(sql, (self.description, self.amount, self.date, self.category_id, self.user_id))
+        CONN.commit()
+
+        self.id = CURSOR.lastrowid
+        type(self).all[self.id] = self
+
+    def delete(self):
+        sql = """DELETE * FROM expenses WHERE id = ?"""
+
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+        
+        del type(self).all[self.id]
+        self.id = None
+        
+
+    
     
