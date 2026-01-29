@@ -118,3 +118,24 @@ class Budget:
             budget.id = row[0]
             cls.all[budget.id] = budget
         return budget
+    
+    @classmethod
+    def get_all(cls, user_id):
+        sql = """SELECT * FROM budgets WHERE user_id = ?"""
+
+        rows = CURSOR.execute(sql, (user_id)).fetchall()
+        return [cls.instance_from_db(row) for row in rows]
+    
+    @classmethod
+    def find_by_id(cls, budget_id):
+        sql = """SELECT * FROM budgets WHERE id = ?"""
+
+        row = CURSOR.execute(sql, (budget_id)).fetchone()
+        return cls.instance_from_db(row) if row else None
+    
+    @classmethod
+    def find_by_category_and_name(cls, category_id, month, user_id):
+        sql = """SELECT * FROM budgets WHERE category_id = ? AND month = ? AND user_id = ?"""
+
+        row = CURSOR.execute(sql, (category_id, month, user_id)).fetchone()
+        return cls.instance_from_db(row) if row else None
