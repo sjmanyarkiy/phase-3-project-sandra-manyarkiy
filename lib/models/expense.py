@@ -1,7 +1,7 @@
-from __init__ import CURSOR, CONN
+from config import CURSOR, CONN
 from datetime import datetime
-from category import Category
-from user import User
+from .category import Category
+from .user import User
 
 
 class Expense:

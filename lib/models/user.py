@@ -1,4 +1,4 @@
-from __init__ import CURSOR, CONN
+from config import CURSOR, CONN
 
 class User:
 

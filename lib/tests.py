@@ -6,15 +6,14 @@ Or run with: python tests.py
 
 import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'db'))
 
 # from db.models import User, Category, Expense, Budget
 
-from __init__ import CURSOR, CONN
-from lib.models.user import User
-from lib.models.category import Category
-from lib.models.expense import Expense
-from lib.models.budget import Budget
+from config import CURSOR, CONN
+from models.user import User
+from models.category import Category
+from models.expense import Expense
+from models.budget import Budget
 
 # ==================== SETUP & TEARDOWN ====================
 
