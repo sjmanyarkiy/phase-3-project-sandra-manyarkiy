@@ -51,12 +51,15 @@ class Expense:
         self.id = CURSOR.lastrowid
         type(self).all[self.id] = self
 
+    def update(self):
+        sql = """UPDATE categories SET description = ?, amount = ? WHERE id = ?"""
+
     def delete(self):
         sql = """DELETE * FROM expenses WHERE id = ?"""
 
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
-        
+
         del type(self).all[self.id]
         self.id = None
         
