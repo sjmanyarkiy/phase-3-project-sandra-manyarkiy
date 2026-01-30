@@ -46,23 +46,3 @@ def budget_menu():
     print("5. Back to main menu")
     print("="*50)
 
-def handle_user_menu():
-    """Handle user management menu"""
-    while True:
-        user_menu()
-        choice = input("> ").strip()
-        
-        if choice == "1":
-            create_user()
-        elif choice == "2":
-            view_all_users()
-        elif choice == "3":
-            find_user_by_id()
-        elif choice == "4":
-            user = find_user_by_id()
-            if user:
-                delete_user(user)
-        elif choice == "5":
-            break
-        else:
-            print("❌ Invalid choice. Please try again.")

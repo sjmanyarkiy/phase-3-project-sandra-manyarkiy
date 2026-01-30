@@ -40,7 +40,7 @@ class Category:
         sql = """CREATE TABLE IF NOT EXISTS categories (
             id INTEGER PRIMARY KEY,
             name TEXT,
-            user_id INTEGERR,
+            user_id INTEGER,
             FOREIGN KEY (user_id) REFERENCES users(id)
         
         )"""
@@ -77,6 +77,9 @@ class Category:
 
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
+
+        del type(self).all[self.id]
+        self.id = None
 
     @classmethod
     def create(cls, name, user_id):
