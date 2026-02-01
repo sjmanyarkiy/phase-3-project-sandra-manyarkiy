@@ -154,7 +154,31 @@ def category_menu():
             try:
                 category = Category.create(name, user.id)
                 click.echo(click.style(f"Success: {category} has been created", fg="green"))
+            except Exception as exc:
+                click.echo(click.style(f"Error: {exc}"))
 
+        elif choice == "2":
+            # list all categories
+            categories = Category.get_all(user.id)
+            if not categories:
+                click.echo("No categories found")
+            else:
+                click.echo(f"\nCATEGORES FOR {user.name}")
+                for cat in categories:
+                    click.echo(cat)
+
+        elif choice == "3":
+            break
+
+def expense_menu():
+    user_id = click.prompt("Enter user ID", type=id)
+    user = User.find_by_id(user_id)
+    if not user:
+        click.echo(click.style(f"User {user_id} not found", fg="red"))
+        return
+    
+    while True:
+        
 
 
 if __name__ == "__main__":
