@@ -24,7 +24,7 @@ class User:
             raise ValueError("name must be a non-empty string")
 
     @classmethod   
-    def create_table(self):
+    def create_table(cls):
         sql = """CREATE TABLE IF NOT EXISTS users (
 
             id INTEGER PRIMARY KEY,
@@ -36,7 +36,7 @@ class User:
         CONN.commit()
 
     @classmethod
-    def drop_table(self):
+    def drop_table(cls):
         sql = """DROP TABLE IF EXISTS users"""
 
         CURSOR.execute(sql)

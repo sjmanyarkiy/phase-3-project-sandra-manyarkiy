@@ -129,11 +129,12 @@ class Expense:
         if expense:
             expense.description = row[1]
             expense.amount = row[2]
-            expense.date = row[3]
-            expense.category_id = row[4]
-            expense._user_id = row[5]
+            expense.category_id = row[3]
+            expense.user_id = row[4]
+            expense.date = row[5]
         else:
-            expense = cls(row[1], row[2], row[4], row[5], row[0], row[3])
+            expense = cls(row[1], row[2], row[3], row[4], row[5])
+            expense.id = row[0]
             cls.all[expense.id] = expense
         return expense
     
