@@ -32,10 +32,10 @@ fintrack/
 
 ### Tech Stack
 
-**Language**: Python 3.8+
-**CLI Framework**: Click
-**Databas**: SQLite3
-**ORM**: Raw SQL with Python classes
+- **Language**: Python 3.8+
+- **CLI Framework**: Click
+- **Databas**: SQLite3
+- **ORM**: Raw SQL with Python classes
 
 ### Prerequisites
 
