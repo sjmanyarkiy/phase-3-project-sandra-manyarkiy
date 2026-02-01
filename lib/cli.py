@@ -266,7 +266,7 @@ def expense_menu():
 
         elif choice == "4":
             # delete expense
-            expenses = Expense.get_all(user.id):
+            expenses = Expense.get_all(user.id)
             if not expenses:
                 click.echo(click.style("No expenses to delete"))
                 continue
@@ -293,6 +293,121 @@ def expense_menu():
 
         elif choice == "5":
             break
+
+def budget_menu():
+    user_id = click.prompt("Enter user ID", type=int)
+    user = User.find_by_id(user_id)
+    if not user:
+        click.echo(f"User {user_id} not found")
+        return
+    
+    while True:
+        click.echo("\n" + "="*60)
+        click.echo(click.style(f"  BUDGET MENU - {user.name}", fg="magenta", bold=True))
+        click.echo("="*60)
+        click.echo("1. Set a budget")
+        click.echo("2. View all budgets")
+        click.echo("3. View budget vs spending")
+        click.echo("4. Delete a budget")
+        click.echo("5. Back to main menu")
+        click.echo("="*60)
+
+        choice = click.prompt(
+            "Select an option",
+            type=click.Choice(["1", "2", "3", "4", "5"])
+        )
+
+        if choice == "1":
+            # set budget
+            categories = Category.get_all(user.id)
+            if not categories:
+                click.echo("No categories found")
+                continue
+
+            click.echo("\nAvailable categories:")
+            for i, cat in enumerate(categories, 1):
+                click.echo(f"{i}. {cat.name}")
+
+            try:
+                cat_choice = click.prompt("Select category number", type=int)
+                if cat_choice < 1 or cat_choice > len(categories):
+                    click.echo(click.style("Invalid category selection"))
+                    continue
+
+                category = categories[cat_choice - 1]
+                month = click.prompt("Enter month and year")
+                limit = click.prompy("Enter monthly budget limit", type=float)
+
+                existing = Budget.find_by_category_and_month(category.id, month, user.id)
+                if existing:
+                    existing.update(limit)
+                    click.echo(f"Budget for {category.name} in {month} updated to {limit:.2f} KSH", fg="green")
+                else:
+                    budget = Budget.create(limit, month, category.id, user.id)
+                    click.echo(f"Budget for {category.name} in {month} set to {limit:.2f} KSH", fg="green")
+            except Exception as exc:
+                click.echo(f"Error: {exc}")
+
+        elif choice == "2":
+            # list budget
+            budgets = Budget.get_all(user.id)
+            if not budgets:
+                click.echo("No budgets found")
+            else:
+                click.echo(f"\nBUDGETS FOR {user.name}")
+                for budget in budgets:
+                    click.echo(f"ID: {budget.id} | {budget.category.name} ({budget.month}) | Limit: {budget.monthly_limit:.2f} KSH")
+                
+        elif choice == "3":
+            # budget vs spending
+            budgets = Budget.get_all(user.id)
+            if not budgets:
+                click.echo("No budgets found. Set a budget first!")
+            else:
+                click.echo(f"\nBUDGET vs SPENDING FOR {user.name}")
+
+                for budget in budgets:
+                    expenses = Expense.get_by_category(budget.category.id, user.id)
+                    total_spent = sum(exp.amount for exp in expenses)
+                    remaining = budget.monthly_limit - total_spent
+                    status = click.style("Within Budget", fg="green") if remaining >= 0 else click.style("Over budget!", fg="red")
+
+                    click.echo(f"\n{budget.category.name} ({budget.month})")
+                    click.echo(f"  Budget: {budget.monthly_limit:.2f} KSH")
+                    click.echo(f"  Spent: {total_spent:.2f} KSH")
+                    click.echo(f"  Remaining: {remaining:.2f} {status} KSH")
+
+        elif choice == "4":
+            # delete budget
+            budgets = Budget.get_all(user.id)
+            if not budgets:
+                click.echo("No budget to delete")
+                continue
+
+            click.echo("\nYour budgets:")
+            for i, budget in enumerate(budgets, 1):
+                click.echo(f"{i}. {budget.category.name} ({budget.month}) - {budget.monthly_limit:.2f} KSH")
+
+            try:
+                budget_choice = click.prompt("Select budget number to delete", type=int)
+                if budget_choice < 1 or budget_choice > len(budgets):
+                    click.echo(click.style("Invalid selection", fg="red"))
+                    continue
+
+                budget = budgets[budget_choice - 1]
+                if click.confirm(f"Delete budget for {budget.category.name}?"):
+                    budget.delete()
+                    click.echo(click.style("Budget deleted successfully", fg="green"))
+                else:
+                    click.ech("Deletion cancelled")
+            except Exception as exc:
+                click.echo("Error: {exc}")
+
+        elif choice == "5":
+            break
+
+                
+
         
 
 
