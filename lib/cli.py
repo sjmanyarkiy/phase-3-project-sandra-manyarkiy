@@ -408,7 +408,7 @@ def budget_menu():
 
 def reports_menu():
     user_id = click.prompt("Enter user ID", type=int)
-    user = User.find_by_id(user.id)
+    user = User.find_by_id(user_id)
     if not user:
         click.echo(f"User {user_id} not found")
         return
@@ -436,7 +436,7 @@ def reports_menu():
                 click.echo(f"\nALL EXPENSES FOR {user.name}")
                 total = 0
                 for exp in expenses:
-                    click.echo(f"ID: {exp.id} | {exp.description} | ${exp.amount:.2f} | Category: {exp.category.name}")
+                    click.echo(f"ID: {exp.id} | {exp.description} | {exp.amount:.2f} KSH | Category: {exp.category.name}")
                     total += exp.amount
                 click.echo(click.style(f"TOTAL: {total:.2f} KSH", fg="yellow", bold=True))
                 
