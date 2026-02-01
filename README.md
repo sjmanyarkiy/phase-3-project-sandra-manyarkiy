@@ -1,4 +1,4 @@
-# Finance Tracker CLI Application
+# 💰 FinTrack - A Finance Tracker CLI Application
 
 A command-line interface (CLI) application for managing personal finances, including tracking expenses, setting budgets, and managing spending categories.
 
@@ -30,25 +30,42 @@ fintrack/
 └── README.md
 ```
 
+### Tech Stack
+
+**Language**: Python 3.8+
+**CLI Framework**: Click
+**Databas**: SQLite3
+**ORM**: Raw SQL with Python classes
+
+### Prerequisites
+
+Python 3.8 or higher
+Pipenv
+
 ## Installation
 
 1. Clone the repository and navigate to the project directory
+```bash
+    git clone <repository-url>
+    cd fintrack
+```
+
 2. Install dependencies:
 ```bash
    pipenv install
    pipenv shell
 ```
 
-3. Initialize the database:
+3. Initialize the database - This creates the SQLite database and populates it with sample data
 ```bash
-   python init_db.py
+   python seed.py
 ```
 
 ## Usage
 
 Run the CLI application:
 ```bash
-python lib/cli.py
+    python lib/cli.py
 ```
 
 ### Main Menu Options
@@ -58,6 +75,36 @@ python lib/cli.py
 3. **Manage Budgets** - Set budgets, view budgets, and compare spending vs budgets
 4. **View Reports** - Generate financial reports and summaries
 5. **Exit** - Close the application
+
+Example Workflow
+
+Create a User
+
+1. Main Menu → Option 1 → Option 1
+   Enter username: "Jane Smith"
+
+
+2. Create Categories
+   Main Menu → Option 1 → Option 7
+   Enter user ID: 1
+   Create categories: Food, Transport, Entertainment
+
+
+3. Add an Expense
+   Main Menu → Option 2
+   Enter user ID: 1
+   Add expense: "Groceries" for $50 in Food category
+
+
+4. Set a Budget
+   Main Menu → Option 3
+   Enter user ID: 1
+   Set Food budget: $300 for January 2025
+
+
+5. View Reports
+   Main Menu → Option 4
+   View all expenses, by category, or budget vs. spending
 
 ## Database Schema
 
@@ -80,7 +127,7 @@ python lib/cli.py
 
 ### Budgets Table
 - `id` (INTEGER PRIMARY KEY)
-- `monthly_limit` (REAL NOT NULL)
+- `monthly_limit` (INTEGER NOT NULL)
 - `month` (TEXT NOT NULL)
 - `category_id` (INTEGER FOREIGN KEY)
 - `user_id` (INTEGER FOREIGN KEY)
@@ -131,6 +178,39 @@ Manages monthly spending budgets.
 - `update(monthly_limit)` - Update budget limit
 - `delete()` - Delete budget
 
+### ORM Implementation
+All models follow Object-Relational Mapping patterns with:
+
+- Property Decorators - Input validation for all attributes
+- CRUD Methods - Create, Read, Update, Delete operations
+- Class Methods - Database queries (get_all, find_by_id, find_by_name)
+- Instance Methods - Object-level operations (save, update, delete)
+- Dictionary Caching - In-memory caching of objects via *all* dictionary
+
+### Example Menu
+```bash
+from lib.models.user import User
+from lib.models.expense import Expense
+
+# Create a user
+user = User.create("John Doe")
+
+# Find a user
+found_user = User.find_by_id(1)
+
+# Get all users
+all_users = User.get_all()
+
+# Create an expense
+expense = Expense.create("Lunch", 15.50, category_id=1, user_id=1)
+
+# Get expenses for a user
+expenses = Expense.get_all(user_id=1)
+
+# Delete an expense
+expense.delete()
+```
+
 ## Key Features
 
 ### Input Validation
@@ -174,5 +254,10 @@ Manages monthly spending budgets.
 - Web interface using Flask or Django
 
 ## Author
+
+Sandra Manyarkiy
+
+## License
+This project is open source and available under the MIT License.
 
 Created as a Phase 3 project for learning Python ORM patterns and CLI design.
