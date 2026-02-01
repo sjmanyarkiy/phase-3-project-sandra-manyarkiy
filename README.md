@@ -259,5 +259,3 @@ Sandra Manyarkiy
 
 ## License
 This project is open source and available under the MIT License.
-
-Created as a Phase 3 project for learning Python ORM patterns and CLI design.
