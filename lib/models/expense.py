@@ -64,7 +64,11 @@ class Expense:
         else:
             raise ValueError("user_id must exist in the user table")
 
+    @property
+    def category(self):
+        return Category.find_by_id(self.category_id)
     
+
     @classmethod
     def create_table(cls):
         sql = """CREATE TABLE IF NOT EXISTS expenses (

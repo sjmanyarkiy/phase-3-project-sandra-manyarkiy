@@ -7,7 +7,7 @@ from models.category import Category
 from models.expense import Expense
 from models.budget import Budget
 
-click.command()
+@click.command()
 def menu():
     """main menu"""
 
@@ -211,8 +211,8 @@ def expense_menu():
                     continue
                 
                 category = categories[cat_choice - 1]
-                description = click.prompt("Enter expense descritpion")
-                amount = click.promp("Enter amount", type=float)
+                description = click.prompt("Enter expense description")
+                amount = click.prompt("Enter amount", type=float)
 
                 expense = Expense.create(description, amount, category.id, user.id)
                 click.echo(click.style(f"Success: {expense} added", fg="green"))
@@ -228,7 +228,7 @@ def expense_menu():
                 click.echo(click.style(f"ALL EXPENSES FOR {user.name}"))
                 total = 0
                 for exp in expenses:
-                    click.echo(f"ID: {exp.id} | {exp.description} | ${exp.amount:.2f} | Category: {exp.category.name}")
+                    click.echo(f"ID: {exp.id} | {exp.description} | {exp.amount:.2f} KSH | Category: {exp.category.name}")
                     total += exp.amount
                 click.echo(click.style(f"TOTAL: {total:.2f} KSH", fg="green", bold=True))
 
@@ -272,8 +272,8 @@ def expense_menu():
                 continue
 
             click.echo("\nYour expenses")
-            for i, exp in enumerate(expense, 1):
-                click.echo(f"{i}. {exp.description} - ${exp.amount:.2f}")
+            for i, exp in enumerate(expenses, 1):
+                click.echo(f"{i}. {exp.description} - {exp.amount:.2f} KSH")
 
             try:
                 exp_choice = click.prompt("Select expense number to delete", type=int)
@@ -281,7 +281,7 @@ def expense_menu():
                     click.echo(click.style("Invalid selection"))
                     continue
 
-                expenses = expenses[exp_choice - 1]
+                expense = expenses[exp_choice - 1]
                 if click.confirm(f"Delete '{expense.description}'?"):
                     expense.delete()
                     click.echo(click.style("Expense deleted successfully", fg="green"))
@@ -336,15 +336,15 @@ def budget_menu():
 
                 category = categories[cat_choice - 1]
                 month = click.prompt("Enter month and year")
-                limit = click.prompy("Enter monthly budget limit", type=float)
+                limit = click.prompt("Enter monthly budget limit", type=float)
 
                 existing = Budget.find_by_category_and_month(category.id, month, user.id)
                 if existing:
                     existing.update(limit)
-                    click.echo(f"Budget for {category.name} in {month} updated to {limit:.2f} KSH", fg="green")
+                    click.echo(click.style(f"Budget for {category.name} in {month} updated to {limit:.2f} KSH", fg="green"))
                 else:
                     budget = Budget.create(limit, month, category.id, user.id)
-                    click.echo(f"Budget for {category.name} in {month} set to {limit:.2f} KSH", fg="green")
+                    click.echo(click.style(f"Budget for {category.name} in {month} set to {limit:.2f} KSH", fg="green"))
             except Exception as exc:
                 click.echo(f"Error: {exc}")
 
@@ -399,14 +399,101 @@ def budget_menu():
                     budget.delete()
                     click.echo(click.style("Budget deleted successfully", fg="green"))
                 else:
-                    click.ech("Deletion cancelled")
+                    click.echo("Deletion cancelled")
             except Exception as exc:
                 click.echo("Error: {exc}")
 
         elif choice == "5":
             break
 
+def reports_menu():
+    user_id = click.prompt("Enter user ID", type=int)
+    user = User.find_by_id(user.id)
+    if not user:
+        click.echo(f"User {user_id} not found")
+        return
+    
+    while True:
+        click.echo("\n" + "="*60)
+        click.echo(click.style(f"  REPORTS - {user.name}", fg="yellow", bold=True))
+        click.echo("="*60)
+        click.echo("1. View all expenses")
+        click.echo("2. View expenses by category")
+        click.echo("3. View budget vs spending")
+        click.echo("4. Back to main menu")
+        click.echo("="*60)
+
+        choice = click.prompt("Select an option",
+            type=click.Choice(["1", "2", "3", "4"])
+        )
+
+        if choice == "1":
+            # view all expenses
+            expenses = Expense.get_all(user.id)
+            if not expenses:
+                click.echo(click.style("No expenses found"))
+            else:
+                click.echo(f"\nALL EXPENSES FOR {user.name}")
+                total = 0
+                for exp in expenses:
+                    click.echo(f"ID: {exp.id} | {exp.description} | ${exp.amount:.2f} | Category: {exp.category.name}")
+                    total += exp.amount
+                click.echo(click.style(f"TOTAL: {total:.2f} KSH", fg="yellow", bold=True))
                 
+        elif choice == "2":
+            categories = Category.get_all(user.id)
+            if not categories:
+                click.echo("No categories found")
+                continue
+
+            click.echo("\nAvailable categories:")
+            for i, cat in enumerate(categories, 1):
+                click.echo(f"{i}. {cat.name}")
+
+            try:
+                cat_choice = click.prompt("Select category number", type=int)
+                if cat_choice < 1 or cat_choice > len(categories):
+                    click.echo("Invalid category choice")
+                    continue
+
+                category = categories[cat_choice - 1]
+                expenses = Expense.get_by_category(category.id, user.id)
+
+                if not expenses:
+                    click.echo(f"No expenses found in {category.name}")
+                else:
+                    click.echo(click.style(f"\nEXPENSES IN {category.name}", bold=True))
+                    total = 0
+                    for exp in expenses:
+                        click.echo(f"ID: {exp.id} | {exp.description} | {exp.amount:.2f} KSH")
+                        total += exp.amount
+                    click.echo(click.style(f"TOTAL: {total:.2f} KSH", bold=True))
+            except Exception as exc:
+                click.echo(f"Error: {exc}")
+
+        elif choice == "3":
+            budgets = Budget.get_all(user.id)
+            if not budgets:
+                click.echo("No budgets found. Set a budget first.")
+            else:
+                click.echo(click.style(f"\nBUDGET vs SPENDING FOR {user.name}", bold=True))
+
+                for budget in budgets:
+                    expenses = Expense.get_by_category(budget.category.id, user.id)
+                    total_spent = sum(exp.amount for exp in expenses)
+                    remaining = budget.monthly_limit - total_spent
+                    status = click.style("Within budget 😊", fg="green") if remaining >= 0 else click.style("Over Budget! 😬")
+
+                    click.echo(f"\n{budget.category.name} ({budget.month})")
+                    click.echo(f"  Budget: {budget.monthly_limit:.2f} KSH")
+                    click.echo(f"  Spent: {total_spent:.2f} KSH")
+                    click.echo(f"  Remaining: {remaining:.2f} KSH {status}")
+
+        elif choice == "4":
+            break
+
+
+
 
         
 
