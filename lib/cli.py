@@ -121,10 +121,41 @@ def user_menu():
                 click.echo(click.style(f"User {user} not found"))
 
         elif choice == "7":
-            pass
+            category_menu()
 
         elif choice == "8":
             break
+
+
+def category_menu():
+    user_id = click.prompt("Enter user ID", type=int)
+    user = User.find_by_id(user_id)
+    if not user:
+        click.echo(click.style(f"User {user_id} not found"))
+        return
+    
+    while True:
+        click.echo("\n" + "="*60)
+        click.echo(click.style(f"  CATEGORY MENU - {user.name}", fg="blue", bold=True))
+        click.echo("="*60)
+        click.echo("1. Create a category")
+        click.echo("2. View all categories")
+        click.echo("3. Back to main menu")
+        click.echo("="*60)
+
+        choice = click.prompt(
+            "Select an option",
+            type=click.Choice(["1", "2", "3"])
+        )
+
+        if choice == "1":
+            # create a category
+            name = click.prompt("Enter category name")
+            try:
+                category = Category.create(name, user.id)
+                click.echo(click.style(f"Success: {category} has been created", fg="green"))
+
+
 
 if __name__ == "__main__":
     menu()
