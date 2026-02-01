@@ -24,7 +24,7 @@ fintrack/
 │   ├── config.py
 │   ├── debug.py
 │   └── finance_tracker.db
-├── init_db.py
+├── seed.py
 ├── Pipfile
 ├── Pipfile.lock
 └── README.md
