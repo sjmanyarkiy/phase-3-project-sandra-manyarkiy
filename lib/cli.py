@@ -12,7 +12,8 @@ def menu():
     """main menu"""
 
     while True:
-        click.echo("\n" + "=*60")
+        click.echo("\n" + "="*60)
+        click.echo(click.style("  💰 FINANCE TRACKER - MAIN MENU 💰", fg="cyan", bold=True))
         click.echo("="*60)
         click.echo("1. Manage Users")
         click.echo("2. Manage Expenses")
@@ -32,7 +33,7 @@ def menu():
         elif choice == "4":
             reports_menu()
         elif choice == "5":
-            click.echo(click.style("\n👋 Thank you for using Finance Tracker. Goodbye!", fg="yellow"))
+            click.echo(click.style("\n Thank you for using Finance Tracker. Goodbye! 👋🏾"))
         break
 
 def user_menu():
@@ -60,7 +61,7 @@ def user_menu():
             name = click.prompt("Enter user name")
             try:
                 user = User.create(name)
-                click.echo(click.style(f"User {name}"), fg="green")
+                click.echo(click.style(f"Success: User {name} has been created", fg="green"))
             except Exception as exc:
                 click.echo(click.style(f"Error: {exc}", fg="red"))
 
@@ -88,7 +89,7 @@ def user_menu():
             user_id = click.prompt("Enter the user's ID", type=int)
             user = User.find_by_id(user_id)
             if user:
-                click.echo(click.style(f"{name}", fg="green"))
+                click.echo(click.style(f"{user}", fg="green"))
             else:
                 click.echo(click.style(f"User {user_id} not found", fg="red"))
 
@@ -102,6 +103,28 @@ def user_menu():
                 try:
                     name = click.prompt("Enter the user's new name")
                     user.update(name)
-                    click.echo(click.style(f" Success, user has been updated to {user} ", fg="red"))
+                    click.echo(click.style(f" Success, user has been updated to {user} ", fg="green"))
                 except Exception as exc:
                     click.echo(click.style(f"Error {exc} ", fg="red"))
+
+        elif choice == "6":
+            # delete user
+            user_id = click.prompt("Enter the user's id", type=int)
+            user = User.find_by_id(user_id)
+            if user:
+                if click.confirm(f"Delete user {user.name}?"):
+                    user.delete()
+                    click.echo(click.style(f"User {user_id} deleted", fg="green"))
+                else:
+                    click.echo(click.style("Deletion has been cancelled"))
+            else:
+                click.echo(click.style(f"User {user} not found"))
+
+        elif choice == "7":
+            pass
+
+        elif choice == "8":
+            break
+
+if __name__ == "__main__":
+    menu()
