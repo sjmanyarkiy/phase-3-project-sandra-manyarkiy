@@ -202,7 +202,7 @@ found_user = User.find_by_id(1)
 all_users = User.get_all()
 
 # Create an expense
-expense = Expense.create("Lunch", 15.50, category_id=1, user_id=1)
+expense = Expense.create("Lunch", 350 KSH, category_id=1, user_id=1)
 
 # Get expenses for a user
 expenses = Expense.get_all(user_id=1)
