@@ -233,7 +233,7 @@ expense.delete()
 - **Python 3.8+** - Programming language
 - **SQLite** - Database
 - **Click** - CLI framework
-- **SQLAlchemy patterns** - ORM design patterns (without the full framework)
+- **ORM design patterns**
 
 ## Development Workflow
 
