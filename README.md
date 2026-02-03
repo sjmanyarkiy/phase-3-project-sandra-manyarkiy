@@ -227,12 +227,6 @@ expense.delete()
 - Foreign key relationships maintain data integrity
 - Transaction commits ensure data consistency
 
-## Technologies Used
-
-- **Python 3.8+** - Programming language
-- **SQLite** - Database
-- **Click** - CLI framework
-
 ## Development Workflow
 
 1. Create or modify a model class
