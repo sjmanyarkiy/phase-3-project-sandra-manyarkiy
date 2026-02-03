@@ -109,7 +109,7 @@ Create a User
 
 ### Users Table
 - `id` (INTEGER PRIMARY KEY)
-- `name` (TEXT NOT NULL)
+- `name` (TEXT)
 
 ### Categories Table
 - `id` (INTEGER PRIMARY KEY)
