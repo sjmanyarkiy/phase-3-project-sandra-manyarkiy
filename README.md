@@ -35,7 +35,6 @@ fintrack/
 - **Language**: Python 3.8+
 - **CLI Framework**: Click
 - **Databas**: SQLite3
-- **ORM**: Raw SQL with Python classes
 
 ### Prerequisites
 
@@ -46,7 +45,7 @@ Pipenv
 
 1. Clone the repository and navigate to the project directory
 ```bash
-    git clone <repository-url>
+    git clone [<repository-url>](https://github.com/sjmanyarkiy/fintrack.git)
     cd fintrack
 ```
 
@@ -93,13 +92,13 @@ Create a User
 3. Add an Expense
    Main Menu → Option 2
    Enter user ID: 1
-   Add expense: "Groceries" for $50 in Food category
+   Add expense: "Groceries" for 1000 KSH in Food category
 
 
 4. Set a Budget
    Main Menu → Option 3
    Enter user ID: 1
-   Set Food budget: $300 for January 2025
+   Set Food budget: 3000 KSH for January 2025
 
 
 5. View Reports
@@ -110,25 +109,25 @@ Create a User
 
 ### Users Table
 - `id` (INTEGER PRIMARY KEY)
-- `name` (TEXT UNIQUE NOT NULL)
+- `name` (TEXT NOT NULL)
 
 ### Categories Table
 - `id` (INTEGER PRIMARY KEY)
-- `name` (TEXT NOT NULL)
+- `name` (TEXT)
 - `user_id` (INTEGER FOREIGN KEY)
 
 ### Expenses Table
 - `id` (INTEGER PRIMARY KEY)
-- `description` (TEXT NOT NULL)
-- `amount` (INTEGER NOT NULL)
+- `description` (TEXT)
+- `amount` (INTEGER)
 - `category_id` (INTEGER FOREIGN KEY)
 - `user_id` (INTEGER FOREIGN KEY)
 - `date` (TEXT)
 
 ### Budgets Table
 - `id` (INTEGER PRIMARY KEY)
-- `monthly_limit` (INTEGER NOT NULL)
-- `month` (TEXT NOT NULL)
+- `monthly_limit` (INTEGER)
+- `month` (TEXT)
 - `category_id` (INTEGER FOREIGN KEY)
 - `user_id` (INTEGER FOREIGN KEY)
 
@@ -233,7 +232,6 @@ expense.delete()
 - **Python 3.8+** - Programming language
 - **SQLite** - Database
 - **Click** - CLI framework
-- **ORM design patterns**
 
 ## Development Workflow
 
